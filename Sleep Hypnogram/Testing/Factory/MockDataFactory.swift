@@ -18,37 +18,14 @@ class MockDataFactory {
     ///
     /// - Returns: An array of `HKCategorySample` simulating a full night of sleep with all phases.
     static func generateMockHealthKitSleepData() -> [HKCategorySample] {
-        let now = Date()
-        return [
-            // Awake Phase
+        generateMockSleepSegments().map { segment in
             HKCategorySample(
                 type: HKCategoryType.categoryType(forIdentifier: .sleepAnalysis)!,
-                value: HKCategoryValueSleepAnalysis.awake.rawValue,
-                start: now.addingTimeInterval(-twoHourInterval),
-                end: now.addingTimeInterval(-oneHourInterval)
-            ),
-            // REM Sleep
-            HKCategorySample(
-                type: HKCategoryType.categoryType(forIdentifier: .sleepAnalysis)!,
-                value: HKCategoryValueSleepAnalysis.asleepREM.rawValue,
-                start: now.addingTimeInterval(-oneHourInterval),
-                end: now.addingTimeInterval(-halfHourInterval)
-            ),
-            // Core Sleep
-            HKCategorySample(
-                type: HKCategoryType.categoryType(forIdentifier: .sleepAnalysis)!,
-                value: HKCategoryValueSleepAnalysis.asleepCore.rawValue,
-                start: now.addingTimeInterval(-halfHourInterval),
-                end: now
-            ),
-            // Deep Sleep
-            HKCategorySample(
-                type: HKCategoryType.categoryType(forIdentifier: .sleepAnalysis)!,
-                value: HKCategoryValueSleepAnalysis.asleepDeep.rawValue,
-                start: now,
-                end: now.addingTimeInterval(oneHourInterval)
+                value: sleepPhaseToHKValue(segment.phase),
+                start: segment.startDate,
+                end: segment.endDate
             )
-        ]
+        }
     }
 
     /// Generates mock `SleepSegment` data for testing or previews.
@@ -56,26 +33,62 @@ class MockDataFactory {
     /// - Returns: An array of `SleepSegment` simulating a full night of sleep with all phases.
     static func generateMockSleepSegments() -> [SleepSegment] {
         let now = Date()
+        let eightHoursAgo = now.addingTimeInterval(-8 * oneHourInterval)
+
         return [
+            // Awake Phase (short burst)
             SleepSegment(
-                startDate: now.addingTimeInterval(-twoHourInterval),
-                endDate: now.addingTimeInterval(-oneHourInterval),
+                startDate: eightHoursAgo,
+                endDate: eightHoursAgo.addingTimeInterval(10 * 60), // 10 minutes
                 phase: .awake
             ),
+            // Core Sleep
             SleepSegment(
-                startDate: now.addingTimeInterval(-oneHourInterval),
-                endDate: now.addingTimeInterval(-halfHourInterval),
-                phase: .rem
-            ),
-            SleepSegment(
-                startDate: now.addingTimeInterval(-halfHourInterval),
-                endDate: now,
+                startDate: eightHoursAgo.addingTimeInterval(10 * 60),
+                endDate: eightHoursAgo.addingTimeInterval(2 * oneHourInterval),
                 phase: .core
             ),
+            // REM Sleep
             SleepSegment(
-                startDate: now,
-                endDate: now.addingTimeInterval(oneHourInterval),
+                startDate: eightHoursAgo.addingTimeInterval(2 * oneHourInterval),
+                endDate: eightHoursAgo.addingTimeInterval(2.5 * oneHourInterval), // 30 minutes
+                phase: .rem
+            ),
+            // Deep Sleep
+            SleepSegment(
+                startDate: eightHoursAgo.addingTimeInterval(2.5 * oneHourInterval),
+                endDate: eightHoursAgo.addingTimeInterval(4 * oneHourInterval), // 1.5 hours
                 phase: .deep
+            ),
+            // Awake Phase (short burst)
+            SleepSegment(
+                startDate: eightHoursAgo.addingTimeInterval(4 * oneHourInterval),
+                endDate: eightHoursAgo.addingTimeInterval(4 * oneHourInterval + 15 * 60), // 15 minutes
+                phase: .awake
+            ),
+            // Core Sleep
+            SleepSegment(
+                startDate: eightHoursAgo.addingTimeInterval(4 * oneHourInterval + 15 * 60),
+                endDate: eightHoursAgo.addingTimeInterval(6 * oneHourInterval), // 1.75 hours
+                phase: .core
+            ),
+            // REM Sleep
+            SleepSegment(
+                startDate: eightHoursAgo.addingTimeInterval(6 * oneHourInterval),
+                endDate: eightHoursAgo.addingTimeInterval(6.5 * oneHourInterval), // 30 minutes
+                phase: .rem
+            ),
+            // Deep Sleep
+            SleepSegment(
+                startDate: eightHoursAgo.addingTimeInterval(6.5 * oneHourInterval),
+                endDate: eightHoursAgo.addingTimeInterval(7.5 * oneHourInterval), // 1 hour
+                phase: .deep
+            ),
+            // Awake Phase (short burst before waking)
+            SleepSegment(
+                startDate: eightHoursAgo.addingTimeInterval(7.5 * oneHourInterval),
+                endDate: now, // End of 8-hour sleep cycle
+                phase: .awake
             )
         ]
     }
@@ -84,11 +97,26 @@ class MockDataFactory {
     ///
     /// - Returns: A `HypnogramData` instance containing mock sleep segments and time data.
     static func generateMockHypnogramData() -> HypnogramData {
-        let now = Date()
+        let segments = generateMockSleepSegments()
         return HypnogramData(
-            segments: generateMockSleepSegments(),
-            startTime: now.addingTimeInterval(-twoHourInterval),
-            endTime: now.addingTimeInterval(oneHourInterval)
+            segments: segments,
+            startTime: segments.first?.startDate ?? Date(),
+            endTime: segments.last?.endDate ?? Date()
         )
+    }
+
+    // MARK: - Helpers
+
+    /// Converts `SleepPhase` to `HKCategoryValueSleepAnalysis`.
+    ///
+    /// - Parameter phase: The sleep phase to convert.
+    /// - Returns: The corresponding `HKCategoryValueSleepAnalysis`.
+    private static func sleepPhaseToHKValue(_ phase: SleepPhase) -> Int {
+        switch phase {
+        case .awake: return HKCategoryValueSleepAnalysis.awake.rawValue
+        case .rem: return HKCategoryValueSleepAnalysis.asleepREM.rawValue
+        case .core: return HKCategoryValueSleepAnalysis.asleepCore.rawValue
+        case .deep: return HKCategoryValueSleepAnalysis.asleepDeep.rawValue
+        }
     }
 }
