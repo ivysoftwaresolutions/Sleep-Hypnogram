@@ -1,0 +1,52 @@
+# Xcode
+.DS_Store
+build/
+DerivedData/
+*.xcuserstate
+*.xcworkspace
+xcuserdata/
+.idea/
+*.lock
+*.plist.bak
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Swift Package Manager
+.swiftpm/
+.build/
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Checkouts
+Carthage/Build
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+*.ipa
+*.app
+
+# Archives
+*.xcarchive
+
+# Provisioning Profiles
+*.mobileprovision
+*.provisionprofile
+
+# Logs
+*.log
+
+# Temporary files
+*.swp
+*.swo
+*.tmp
+
+# Other
+.env
+*.xcresult
