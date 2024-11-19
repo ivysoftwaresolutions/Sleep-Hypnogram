@@ -81,6 +81,7 @@ Sleep Hypnogram is an iOS app that visualizes the user's sleep data in the form 
 ## Known Issues
 
 - The app relies on accurate and complete HealthKit sleep data. If no data is available in HealthKit, the app will show a "No sleep data available" message.
+- Unit testing has not been added.
 
 ---
 
@@ -90,7 +91,3 @@ Sleep Hypnogram is an iOS app that visualizes the user's sleep data in the form 
 - **Supported Devices**: iPhones with HealthKit-enabled features (Apple Watch integration recommended).
 
 ---
-
-## Contact
-
-For questions or issues, feel free to reach out to [your contact information or repository issues section].
