@@ -2,7 +2,7 @@
 
 Sleep Hypnogram is an iOS app that visualizes the user's sleep data in the form of a hypnogram. It uses HealthKit to access sleep data from the user's Apple Watch or iPhone and Swift Charts to display this data in an intuitive and visually appealing way.
 
-![hypnogram](https://github.com/user-attachments/assets/d2034aac-ff21-4a5f-a87c-a03138165b61)
+![Simulator Screenshot - iPhone 16 Pro - 2024-11-19 at 18 09 51](https://github.com/user-attachments/assets/20b58a2a-ec36-4327-b8c8-7c8868c87bfa)
 
 ---
 
