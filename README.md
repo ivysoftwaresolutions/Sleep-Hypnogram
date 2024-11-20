@@ -32,7 +32,7 @@ Sleep Hypnogram is an iOS app that visualizes the user's sleep data in the form 
 2. **Clone the repository**:
    - Open the terminal and run the following commands:
      ```bash
-     git clone <repository-url>
+     git clone [<repository-url>](https://github.com/ivysoftwaresolutions/Sleep-Hypnogram)
      cd sleep-hypnogram
      ```
 
