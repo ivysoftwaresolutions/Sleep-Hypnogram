@@ -70,9 +70,10 @@ Sleep Hypnogram is an iOS app that visualizes the user's sleep data in the form 
 ## Testing Notes
 
 - **Device Required**:
-   - HealthKit cannot provide live data in the Simulator, so the app must be tested on a physical device with valid HealthKit data.
+   - HealthKit cannot provide live data in the Simulator, so HealthKit data must be tested on a physical device with valid HealthKit data.
    - For SwiftUI Previews, mock data is provided to test the UI without requiring HealthKit access.
-
+- **Simulator Ability**:
+  - Views can be debugged with mock health data using the Simulator. This code is already integrated.
 - **Mock Data for Previews**:
    - The app includes mock HealthKit data for SwiftUI previews, allowing you to test the UI layout and design in Xcode without requiring live data.
 
